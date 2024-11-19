@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@color/design_default_color_primary"
+        android:padding="10dp"
+        android:text="Movie/Book Tracker"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_primary" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dodaj Książkę/Film"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+
+    <EditText
+        android:id="@+id/tytulEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="35dp"
+        android:hint="wpisać tytułt"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/gatunekEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="35dp"
+        android:hint="wpisać gatunek"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/recenzjaEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="35dp"
+        android:hint="wpisać recenzję/opis"
+        android:inputType="textImeMultiLine" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="35dp"
+        android:layout_marginVertical="5dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💩" />
+
+        <SeekBar
+            android:id="@+id/ocenaSeekBar"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:max="10"
+            android:min="0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🤩" />
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rodzajRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:text="Film" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:text="Książka" />
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/AddButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="35dp"
+        android:text="Dodaj" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/KsiazkaLubFilmRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="35dp"
+        android:layout_marginTop="30sp"
+        android:scrollbars="vertical" />
+
+</LinearLayout>
