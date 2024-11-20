@@ -2,7 +2,10 @@ package com.example.moovie_book_tracker
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.SeekBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,23 +34,36 @@ class MainActivity : AppCompatActivity() {
         val recenzjaEditText = findViewById<EditText>(R.id.recenzjaEditText)
         val gatunekEditText = findViewById<EditText>(R.id.gatunekEditText)
         val ocenaSeekBar = findViewById<SeekBar>(R.id.ocenaSeekBar)
+        val rodzajRadioGroup = findViewById<RadioGroup>(R.id.rodzajRadioGroup)
+        val przeczytaneCheckBox = findViewById<CheckBox>(R.id.pszeczytaneCheckBox)
 
         addButton.setOnClickListener {
-            val tytul = tytulEditText.text.toString().ifEmpty { "Brak tytulu" }
-            val recenzja = recenzjaEditText.text.toString().ifEmpty { "Brak recenzji" }
-            val gatunek = gatunekEditText.text.toString().ifEmpty { "Brak recenzji" }
-            val ocena = ocenaSeekBar.progress
+            lateinit var rodzaj: String
 
+            val selectedRadioButtonId = rodzajRadioGroup.checkedRadioButtonId
+            if (selectedRadioButtonId == -1) {
+                rodzaj = "Brak rodzaju"
+            } else {
+                rodzaj = findViewById<RadioButton>(selectedRadioButtonId).text.toString()
+            }
             tytulEditText.text.clear()
             recenzjaEditText.text.clear()
             gatunekEditText.text.clear()
+            rodzajRadioGroup.clearCheck()
             ocenaSeekBar.progress = 0
 
-            val newKsiazkaLubFilm = KisazkaLubFilm(tytul, recenzja, gatunek, ocena)
-            listOfKsiazkasOrFilms.add(newKsiazkaLubFilm)
+            listOfKsiazkasOrFilms.add(
+                KisazkaLubFilm(
+                    tytulEditText.text.toString().ifEmpty { "Brak tytulu" },
+                    recenzjaEditText.text.toString().ifEmpty { "Brak recenzji" },
+                    gatunekEditText.text.toString().ifEmpty { "Brak gatunku" },
+                    ocenaSeekBar.progress,
+                    rodzaj,
+                    przeczytaneCheckBox.isChecked,
+                ),
+            )
             recyclerView.adapter?.notifyItemInserted(listOfKsiazkasOrFilms.size - 1)
         }
-
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = Adapter(listOfKsiazkasOrFilms)

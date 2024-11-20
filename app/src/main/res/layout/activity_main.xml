@@ -49,8 +49,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
+        android:gravity="top|start"
         android:hint="wpisać recenzję/opis"
-        android:inputType="textImeMultiLine" />
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:scrollbars="vertical" />
 
 
     <LinearLayout
@@ -86,13 +89,12 @@
         android:id="@+id/rodzajRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_marginHorizontal="36dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
             android:text="Film" />
 
         <RadioButton
@@ -101,6 +103,13 @@
             android:layout_marginHorizontal="15dp"
             android:text="Książka" />
     </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/pszeczytaneCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="35dp"
+        android:text="Przeczytane/Objerzane" />
 
 
     <Button
