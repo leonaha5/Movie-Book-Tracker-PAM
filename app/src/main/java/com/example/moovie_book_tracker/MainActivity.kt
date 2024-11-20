@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
 
-        val addButton = findViewById<Button>(R.id.AddButton)
         val tytulEditText = findViewById<EditText>(R.id.tytulEditText)
         val recenzjaEditText = findViewById<EditText>(R.id.recenzjaEditText)
         val gatunekEditText = findViewById<EditText>(R.id.gatunekEditText)
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         val rodzajRadioGroup = findViewById<RadioGroup>(R.id.rodzajRadioGroup)
         val przeczytaneCheckBox = findViewById<CheckBox>(R.id.pszeczytaneCheckBox)
 
-        addButton.setOnClickListener {
+        findViewById<Button>(R.id.AddButton).setOnClickListener {
             lateinit var rodzaj: String
 
             val selectedRadioButtonId = rodzajRadioGroup.checkedRadioButtonId

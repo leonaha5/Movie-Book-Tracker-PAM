@@ -12,13 +12,13 @@ class Adapter(
     class KsiazkaLubFilmViewHolder(
         itemView: View,
     ) : RecyclerView.ViewHolder(itemView) {
-        val kisazkaLubFilmTytul: TextView = itemView.findViewById(R.id.klfLayoutTytulText)
-        val kisazkaLubFilmRecenzja: TextView = itemView.findViewById(R.id.klfLayoutRecenzjaText)
-        val kisazkaLubFilmGatunek: TextView = itemView.findViewById(R.id.klfLayoutGatunekText)
-        val ksiaKisazkaLubFilmOcena: TextView = itemView.findViewById(R.id.klfLayoutOcenaText)
-        val ksiaKisazkaLubFilmRodzaj: TextView = itemView.findViewById(R.id.klfLayoutRodzajText)
+        val kisazkaLubFilmTytul: TextView = itemView.findViewById(R.id.layoutTytul)
+        val kisazkaLubFilmRecenzja: TextView = itemView.findViewById(R.id.layoutRecenzja)
+        val kisazkaLubFilmGatunek: TextView = itemView.findViewById(R.id.layoutGatunek)
+        val ksiaKisazkaLubFilmOcena: TextView = itemView.findViewById(R.id.layoutOcena)
+        val ksiaKisazkaLubFilmRodzaj: TextView = itemView.findViewById(R.id.layoutRodzaj)
         val ksiaKisazkaLubFilmPszeczytane: TextView =
-            itemView.findViewById(R.id.klfLayoutPszeczytaneText)
+            itemView.findViewById(R.id.layoutPrzeczytane)
     }
 
     override fun onCreateViewHolder(

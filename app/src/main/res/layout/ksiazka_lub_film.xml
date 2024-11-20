@@ -6,14 +6,14 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/klfLayoutTytulText"
+        android:id="@+id/layoutTytul"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="*tytul*"
         android:textSize="25sp" />
 
     <TextView
-        android:id="@+id/klfLayoutRecenzjaText"
+        android:id="@+id/layoutRecenzja"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
@@ -26,14 +26,14 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/klfLayoutGatunekText"
+            android:id="@+id/layoutGatunek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Gatunek: *gatunek*" />
 
         <TextView
-            android:id="@+id/klfLayoutOcenaText"
+            android:id="@+id/layoutOcena"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ocena: *ocena*/10" />
@@ -45,14 +45,14 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/klfLayoutPszeczytaneText"
+            android:id="@+id/layoutPrzeczytane"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Przeczytane: *tak*" />
 
         <TextView
-            android:id="@+id/klfLayoutRodzajText"
+            android:id="@+id/layoutRodzaj"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rodzaj: *rodzaj*" />

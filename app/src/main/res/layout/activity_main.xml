@@ -17,7 +17,8 @@
         android:padding="10dp"
         android:text="Movie/Book Tracker"
         android:textAlignment="center"
-        android:textColor="@color/design_default_color_on_primary" />
+        android:textColor="@color/design_default_color_on_primary"
+        tools:ignore="HardcodedText" />
 
 
     <TextView
@@ -25,7 +26,8 @@
         android:layout_height="wrap_content"
         android:text="Dodaj Książkę/Film"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
 
 
     <EditText
@@ -68,7 +70,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="💩" />
+            android:text="💩"
+            tools:ignore="HardcodedText" />
 
         <SeekBar
             android:id="@+id/ocenaSeekBar"
@@ -79,6 +82,7 @@
             android:min="0" />
 
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="🤩" />
@@ -101,7 +105,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
-            android:text="Książka" />
+            android:text="Książka"
+            tools:ignore="HardcodedText" />
     </RadioGroup>
 
     <CheckBox
