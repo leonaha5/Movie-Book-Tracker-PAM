@@ -22,15 +22,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:gravity="end"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/layoutGatunek"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Gatunek: *gatunek*" />
 
         <TextView
             android:id="@+id/layoutOcena"
@@ -39,22 +33,4 @@
             android:text="Ocena: *ocena*/10" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/layoutPrzeczytane"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Przeczytane: *tak*" />
-
-        <TextView
-            android:id="@+id/layoutRodzaj"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rodzaj: *rodzaj*" />
-    </LinearLayout>
 </LinearLayout>

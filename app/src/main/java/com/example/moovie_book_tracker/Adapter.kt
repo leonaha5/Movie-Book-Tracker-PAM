@@ -7,18 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class Adapter(
-    private val ksiazkaLubFilmList: List<KisazkaLubFilm>,
+    private val ksiazkaLubFilmList: MutableList<KsiazkaLubFilm>,
+    private val showAlertDialog: (String, String, String) -> Unit,
 ) : RecyclerView.Adapter<Adapter.KsiazkaLubFilmViewHolder>() {
     class KsiazkaLubFilmViewHolder(
         itemView: View,
     ) : RecyclerView.ViewHolder(itemView) {
         val kisazkaLubFilmTytul: TextView = itemView.findViewById(R.id.layoutTytul)
         val kisazkaLubFilmRecenzja: TextView = itemView.findViewById(R.id.layoutRecenzja)
-        val kisazkaLubFilmGatunek: TextView = itemView.findViewById(R.id.layoutGatunek)
         val ksiaKisazkaLubFilmOcena: TextView = itemView.findViewById(R.id.layoutOcena)
-        val ksiaKisazkaLubFilmRodzaj: TextView = itemView.findViewById(R.id.layoutRodzaj)
-        val ksiaKisazkaLubFilmPszeczytane: TextView =
-            itemView.findViewById(R.id.layoutPrzeczytane)
     }
 
     override fun onCreateViewHolder(
@@ -36,13 +33,20 @@ class Adapter(
         position: Int,
     ) {
         val currentKsiazkaLubFilm = ksiazkaLubFilmList[position]
+
         holder.kisazkaLubFilmTytul.text = currentKsiazkaLubFilm.tytul
         holder.kisazkaLubFilmRecenzja.text = currentKsiazkaLubFilm.recenzja
-        holder.kisazkaLubFilmGatunek.text = "Gatunek: ${currentKsiazkaLubFilm.gatunek}"
         holder.ksiaKisazkaLubFilmOcena.text = "Ocena: ${currentKsiazkaLubFilm.ocena}"
-        holder.ksiaKisazkaLubFilmRodzaj.text = "Rodzaj: ${currentKsiazkaLubFilm.rodzaj}"
-        holder.ksiaKisazkaLubFilmPszeczytane.text =
-            "Pszeczytane: ${if (currentKsiazkaLubFilm.pszeczytane) "Tak" else "Nie"}"
+
+        val pszeczytane = if (currentKsiazkaLubFilm.pszeczytane) "Tak" else "Nie"
+
+        holder.kisazkaLubFilmTytul.setOnClickListener {
+            showAlertDialog(
+                currentKsiazkaLubFilm.rodzaj,
+                currentKsiazkaLubFilm.gatunek,
+                pszeczytane,
+            )
+        }
     }
 
     override fun getItemCount(): Int = ksiazkaLubFilmList.size

@@ -1,6 +1,8 @@
 package com.example.moovie_book_tracker
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
+    var ksiazkaLubFilmList = mutableListOf<KsiazkaLubFilm>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,10 +29,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val listOfKsiazkasOrFilms = mutableListOf<KisazkaLubFilm>()
-
-        val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
-
         val tytulEditText = findViewById<EditText>(R.id.tytulEditText)
         val recenzjaEditText = findViewById<EditText>(R.id.recenzjaEditText)
         val gatunekEditText = findViewById<EditText>(R.id.gatunekEditText)
@@ -36,23 +36,47 @@ class MainActivity : AppCompatActivity() {
         val rodzajRadioGroup = findViewById<RadioGroup>(R.id.rodzajRadioGroup)
         val przeczytaneCheckBox = findViewById<CheckBox>(R.id.pszeczytaneCheckBox)
 
+        ksiazkaLubFilmList =
+            KsiazkasLubFilmsJsonManager.loadSweetsListFromJson(this).toMutableList()
+
+        val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
+
+        val showAlertDialog: (String, String, String) -> Unit = { rodzaj, gatunek, pszeczytane ->
+            AlertDialog
+                .Builder(this)
+                .setTitle("Jakiś tytuł")
+                .setMessage("Rodzaj: ${rodzaj}\nGatunek: ${gatunek}\nPrzeczytane $pszeczytane")
+                .setNeutralButton("Zamknij") { dialog, _ ->
+                    dialog.dismiss()
+                }.create()
+                .show()
+        }
+        val delete: (Int) -> Unit = { position ->
+            ksiazkaLubFilmList.removeAt(position)
+        }
+
+        val adapter =
+            Adapter(
+                ksiazkaLubFilmList = ksiazkaLubFilmList,
+                showAlertDialog = showAlertDialog,
+            )
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
         findViewById<Button>(R.id.AddButton).setOnClickListener {
             lateinit var rodzaj: String
-
             val selectedRadioButtonId = rodzajRadioGroup.checkedRadioButtonId
-            if (selectedRadioButtonId == -1) {
-                rodzaj = "Brak rodzaju"
-            } else {
-                rodzaj = findViewById<RadioButton>(selectedRadioButtonId).text.toString()
-            }
-            tytulEditText.text.clear()
-            recenzjaEditText.text.clear()
-            gatunekEditText.text.clear()
-            rodzajRadioGroup.clearCheck()
-            ocenaSeekBar.progress = 0
 
-            listOfKsiazkasOrFilms.add(
-                KisazkaLubFilm(
+            rodzaj =
+                if (selectedRadioButtonId == -1) {
+                    "Brak rodzaju"
+                } else {
+                    findViewById<RadioButton>(selectedRadioButtonId).text.toString()
+                }
+
+            ksiazkaLubFilmList.add(
+                KsiazkaLubFilm(
                     tytulEditText.text.toString().ifEmpty { "Brak tytulu" },
                     recenzjaEditText.text.toString().ifEmpty { "Brak recenzji" },
                     gatunekEditText.text.toString().ifEmpty { "Brak gatunku" },
@@ -61,10 +85,21 @@ class MainActivity : AppCompatActivity() {
                     przeczytaneCheckBox.isChecked,
                 ),
             )
-            recyclerView.adapter?.notifyItemInserted(listOfKsiazkasOrFilms.size - 1)
-        }
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = Adapter(listOfKsiazkasOrFilms)
+            try {
+                KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
+            } catch (ex: Exception) {
+                Log.e("save", "Coś poszło nie tak $ex")
+            }
+
+            tytulEditText.text.clear()
+            recenzjaEditText.text.clear()
+            gatunekEditText.text.clear()
+            rodzajRadioGroup.clearCheck()
+            ocenaSeekBar.progress = 0
+            przeczytaneCheckBox.isChecked = false
+
+            adapter.notifyItemInserted(ksiazkaLubFilmList.size - 1)
+        }
     }
 }
