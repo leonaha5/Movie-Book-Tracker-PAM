@@ -2,35 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_marginHorizontal="35dp"
+    android:layout_marginVertical="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/layoutTytul"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="*tytul*"
-        android:textSize="25sp" />
-
-    <TextView
-        android:id="@+id/layoutRecenzja"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:text="*recenzja *zxdcfcvgbhnjmkfcvgbhnjvfbghtcfvgyhbunijmctfvgybhunijtcfvgybhutcvfgbuhynzxrcdtfvgbhunijmr*" />
-
     <LinearLayout
+        android:id="@+id/innerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/layoutTytul"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="*tytul*"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/layoutRecenzja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:text="*recenzja *zxdcfcvgbhnjmkfcvgbhnjvfbghtcfvgyhbunijmctfvgybhunijtcfvgybhutcvfgbuhynzxrcdtfvgbhunijmr*" />
 
 
         <TextView
             android:id="@+id/layoutOcena"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="end"
             android:text="Ocena: *ocena*/10" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="24dip"
+        android:text="delete" />
 
 </LinearLayout>

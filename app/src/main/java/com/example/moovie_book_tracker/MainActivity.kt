@@ -2,7 +2,6 @@ package com.example.moovie_book_tracker
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -36,8 +35,11 @@ class MainActivity : AppCompatActivity() {
         val rodzajRadioGroup = findViewById<RadioGroup>(R.id.rodzajRadioGroup)
         val przeczytaneCheckBox = findViewById<CheckBox>(R.id.pszeczytaneCheckBox)
 
-        ksiazkaLubFilmList =
-            KsiazkasLubFilmsJsonManager.loadSweetsListFromJson(this).toMutableList()
+        try {
+            ksiazkaLubFilmList =
+                KsiazkasLubFilmsJsonManager.loadSweetsListFromJson(this).toMutableList()
+        } catch (_: Exception) {
+        }
 
         val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
 
@@ -51,14 +53,20 @@ class MainActivity : AppCompatActivity() {
                 }.create()
                 .show()
         }
+
         val delete: (Int) -> Unit = { position ->
             ksiazkaLubFilmList.removeAt(position)
+            try {
+                KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
+            } catch (_: Exception) {
+            }
         }
 
         val adapter =
             Adapter(
                 ksiazkaLubFilmList = ksiazkaLubFilmList,
                 showAlertDialog = showAlertDialog,
+                delete = delete,
             )
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -88,8 +96,7 @@ class MainActivity : AppCompatActivity() {
 
             try {
                 KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
-            } catch (ex: Exception) {
-                Log.e("save", "Coś poszło nie tak $ex")
+            } catch (_: Exception) {
             }
 
             tytulEditText.text.clear()

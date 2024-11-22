@@ -3,12 +3,14 @@ package com.example.moovie_book_tracker
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class Adapter(
     private val ksiazkaLubFilmList: MutableList<KsiazkaLubFilm>,
     private val showAlertDialog: (String, String, String) -> Unit,
+    private val delete: (Int) -> Unit,
 ) : RecyclerView.Adapter<Adapter.KsiazkaLubFilmViewHolder>() {
     class KsiazkaLubFilmViewHolder(
         itemView: View,
@@ -16,6 +18,8 @@ class Adapter(
         val kisazkaLubFilmTytul: TextView = itemView.findViewById(R.id.layoutTytul)
         val kisazkaLubFilmRecenzja: TextView = itemView.findViewById(R.id.layoutRecenzja)
         val ksiaKisazkaLubFilmOcena: TextView = itemView.findViewById(R.id.layoutOcena)
+        val deleteButton: TextView = itemView.findViewById(R.id.deleteButton)
+        val innerLayout = itemView.findViewById<LinearLayout>(R.id.innerLayout)
     }
 
     override fun onCreateViewHolder(
@@ -40,12 +44,19 @@ class Adapter(
 
         val pszeczytane = if (currentKsiazkaLubFilm.pszeczytane) "Tak" else "Nie"
 
-        holder.kisazkaLubFilmTytul.setOnClickListener {
+        holder.innerLayout.setOnClickListener {
             showAlertDialog(
                 currentKsiazkaLubFilm.rodzaj,
                 currentKsiazkaLubFilm.gatunek,
                 pszeczytane,
             )
+        }
+
+        holder.deleteButton.setOnLongClickListener {
+            delete(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, ksiazkaLubFilmList.size)
+            true
         }
     }
 
