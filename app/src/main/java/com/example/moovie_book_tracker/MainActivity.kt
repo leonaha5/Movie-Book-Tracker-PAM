@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.RadioGroup
+import android.widget.RadioButton
 import android.widget.SeekBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     var ksiazkaLubFilmList = mutableListOf<KsiazkaLubFilm>()
+    var visibleKsiazkaLubFilmList = mutableListOf<KsiazkaLubFilm>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,20 +28,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val tytulEditText = findViewById<EditText>(R.id.tytulEditText)
-        val recenzjaEditText = findViewById<EditText>(R.id.recenzjaEditText)
-        val gatunekEditText = findViewById<EditText>(R.id.gatunekEditText)
-        val ocenaSeekBar = findViewById<SeekBar>(R.id.ocenaSeekBar)
-        val rodzajRadioGroup = findViewById<RadioGroup>(R.id.rodzajRadioGroup)
-        val przeczytaneCheckBox = findViewById<CheckBox>(R.id.pszeczytaneCheckBox)
-
-        try {
-            ksiazkaLubFilmList =
-                KsiazkasLubFilmsJsonManager.loadSweetsListFromJson(this).toMutableList()
-        } catch (_: Exception) {
-        }
-
-        val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
+        ksiazkaLubFilmList =
+            KsiazkasLubFilmsJsonManager.loadSweetsListFromJson(this).toMutableList()
 
         val showAlertDialog: (String, String) -> Unit = { gatunek, pszeczytane ->
             AlertDialog
@@ -55,46 +44,71 @@ class MainActivity : AppCompatActivity() {
 
         val delete: (Int) -> Unit = { position ->
             ksiazkaLubFilmList.removeAt(position)
-            try {
-                KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
-            } catch (_: Exception) {
-            }
+            visibleKsiazkaLubFilmList.removeAt(position)
+            KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
         }
 
         val adapter =
             Adapter(
-                ksiazkaLubFilmList = ksiazkaLubFilmList,
+                ksiazkaLubFilmList = visibleKsiazkaLubFilmList,
                 showAlertDialog = showAlertDialog,
                 delete = delete,
             )
 
+        val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        val radioButtonAll = findViewById<RadioButton>(R.id.radioButtonAll)
+        val radioButtonRead = findViewById<RadioButton>(R.id.radioButtonRead)
+        val radioButtonNotRead = findViewById<RadioButton>(R.id.radioButtonNotRead)
+
+        radioButtonAll.setOnClickListener {
+            visibleKsiazkaLubFilmList.clear()
+            visibleKsiazkaLubFilmList.addAll(ksiazkaLubFilmList) // Add all items back
+            adapter.notifyDataSetChanged()
+        }
+
+        radioButtonRead.setOnClickListener {
+            visibleKsiazkaLubFilmList.clear()
+            visibleKsiazkaLubFilmList.addAll(ksiazkaLubFilmList.filter { it.pszeczytane })
+            adapter.notifyDataSetChanged()
+        }
+
+        radioButtonNotRead.setOnClickListener {
+            visibleKsiazkaLubFilmList.clear()
+            visibleKsiazkaLubFilmList.addAll(ksiazkaLubFilmList.filter { !it.pszeczytane })
+            adapter.notifyDataSetChanged()
+        }
+
+        val tytulEditText = findViewById<EditText>(R.id.tytulEditText)
+        val editTextRecenzja = findViewById<EditText>(R.id.editTextRecenzja)
+        val editTextGatunek = findViewById<EditText>(R.id.editTextGatunek)
+        val seekBarOcena = findViewById<SeekBar>(R.id.seekBarOcena)
+        val przeczytaneCheckBox = findViewById<CheckBox>(R.id.pszeczytaneCheckBox)
+
         findViewById<Button>(R.id.AddButton).setOnClickListener {
-            ksiazkaLubFilmList.add(
+            val newKsiazka =
                 KsiazkaLubFilm(
                     tytulEditText.text.toString().ifEmpty { "Brak tytulu" },
-                    recenzjaEditText.text.toString().ifEmpty { "Brak recenzji" },
-                    gatunekEditText.text.toString().ifEmpty { "Brak gatunku" },
-                    ocenaSeekBar.progress,
+                    editTextRecenzja.text.toString().ifEmpty { "Brak recenzji" },
+                    editTextGatunek.text.toString().ifEmpty { "Brak gatunku" },
+                    seekBarOcena.progress,
                     przeczytaneCheckBox.isChecked,
-                ),
-            )
+                )
 
-            try {
-                KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
-            } catch (_: Exception) {
-            }
+            ksiazkaLubFilmList.add(newKsiazka)
+            visibleKsiazkaLubFilmList.add(newKsiazka)
+            adapter.notifyItemInserted(visibleKsiazkaLubFilmList.size - 1)
+
+            KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, visibleKsiazkaLubFilmList)
 
             tytulEditText.text.clear()
-            recenzjaEditText.text.clear()
-            gatunekEditText.text.clear()
-            rodzajRadioGroup.clearCheck()
-            ocenaSeekBar.progress = 0
+            editTextRecenzja.text.clear()
+            editTextGatunek.text.clear()
+            seekBarOcena.progress = 0
             przeczytaneCheckBox.isChecked = false
-
-            adapter.notifyItemInserted(ksiazkaLubFilmList.size - 1)
         }
     }
 }

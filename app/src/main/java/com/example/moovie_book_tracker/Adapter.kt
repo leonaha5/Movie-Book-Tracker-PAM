@@ -20,6 +20,7 @@ class Adapter(
         val ksiaKisazkaLubFilmOcena: TextView = itemView.findViewById(R.id.layoutOcena)
         val deleteButton: TextView = itemView.findViewById(R.id.deleteButton)
         val innerLayout = itemView.findViewById<LinearLayout>(R.id.innerLayout)
+        val layout = itemView.findViewById<LinearLayout>(R.id.layout)
     }
 
     override fun onCreateViewHolder(
@@ -51,11 +52,10 @@ class Adapter(
             )
         }
 
-        holder.deleteButton.setOnLongClickListener {
+        holder.deleteButton.setOnClickListener {
             delete(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, ksiazkaLubFilmList.size)
-            true
         }
     }
 

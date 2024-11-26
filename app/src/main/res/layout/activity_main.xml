@@ -23,18 +23,21 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
         android:hint="wpisać tytułt"
-        android:inputType="text" />
+        android:inputType="text"
+        tools:ignore="HardcodedText" />
+
 
     <EditText
-        android:id="@+id/gatunekEditText"
+        android:id="@+id/editTextGatunek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
         android:hint="wpisać gatunek"
-        android:inputType="text" />
+        android:inputType="text"
+        tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/recenzjaEditText"
+        android:id="@+id/editTextRecenzja"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
@@ -42,7 +45,8 @@
         android:hint="wpisać recenzję/opis"
         android:inputType="textMultiLine"
         android:lines="4"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:ignore="HardcodedText" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,7 +64,7 @@
             tools:ignore="HardcodedText" />
 
         <SeekBar
-            android:id="@+id/ocenaSeekBar"
+            android:id="@+id/seekBarOcena"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
@@ -71,7 +75,8 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🤩" />
+            android:text="🤩"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <CheckBox
@@ -79,7 +84,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
-        android:text="Przeczytane/Objerzane" />
+        android:text="Przeczytane/Objerzane"
+        tools:ignore="HardcodedText" />
 
 
     <Button
@@ -88,7 +94,48 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="35dp"
-        android:text="Dodaj" />
+        android:text="Dodaj"
+        tools:ignore="HardcodedText" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupRead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="6dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filtry: "
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+
+        <RadioButton
+            android:id="@+id/radioButtonAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:checked="true"
+            android:text="All"
+            tools:ignore="HardcodedText" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Read"
+            tools:ignore="HardcodedText" />
+
+        <RadioButton
+            android:id="@+id/radioButtonNotRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Not Read"
+            tools:ignore="HardcodedText" />
+    </RadioGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/KsiazkaLubFilmRecyclerView"
