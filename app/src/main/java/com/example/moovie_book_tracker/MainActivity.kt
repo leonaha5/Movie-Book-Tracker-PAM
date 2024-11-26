@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SeekBar
 import androidx.activity.enableEdgeToEdge
@@ -43,11 +42,11 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
 
-        val showAlertDialog: (String, String, String) -> Unit = { rodzaj, gatunek, pszeczytane ->
+        val showAlertDialog: (String, String) -> Unit = { gatunek, pszeczytane ->
             AlertDialog
                 .Builder(this)
                 .setTitle("Jakiś tytuł")
-                .setMessage("Rodzaj: ${rodzaj}\nGatunek: ${gatunek}\nPrzeczytane $pszeczytane")
+                .setMessage("Gatunek: ${gatunek}\nPrzeczytane $pszeczytane")
                 .setNeutralButton("Zamknij") { dialog, _ ->
                     dialog.dismiss()
                 }.create()
@@ -73,23 +72,12 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         findViewById<Button>(R.id.AddButton).setOnClickListener {
-            lateinit var rodzaj: String
-            val selectedRadioButtonId = rodzajRadioGroup.checkedRadioButtonId
-
-            rodzaj =
-                if (selectedRadioButtonId == -1) {
-                    "Brak rodzaju"
-                } else {
-                    findViewById<RadioButton>(selectedRadioButtonId).text.toString()
-                }
-
             ksiazkaLubFilmList.add(
                 KsiazkaLubFilm(
                     tytulEditText.text.toString().ifEmpty { "Brak tytulu" },
                     recenzjaEditText.text.toString().ifEmpty { "Brak recenzji" },
                     gatunekEditText.text.toString().ifEmpty { "Brak gatunku" },
                     ocenaSeekBar.progress,
-                    rodzaj,
                     przeczytaneCheckBox.isChecked,
                 ),
             )

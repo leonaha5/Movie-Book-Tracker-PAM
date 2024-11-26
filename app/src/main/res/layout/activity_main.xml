@@ -74,26 +74,6 @@
             android:text="🤩" />
     </LinearLayout>
 
-    <RadioGroup
-        android:id="@+id/rodzajRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="36dp"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Film" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:text="Książka"
-            tools:ignore="HardcodedText" />
-    </RadioGroup>
-
     <CheckBox
         android:id="@+id/pszeczytaneCheckBox"
         android:layout_width="match_parent"

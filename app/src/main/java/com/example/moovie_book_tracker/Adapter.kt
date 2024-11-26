@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class Adapter(
     private val ksiazkaLubFilmList: MutableList<KsiazkaLubFilm>,
-    private val showAlertDialog: (String, String, String) -> Unit,
+    private val showAlertDialog: (String, String) -> Unit,
     private val delete: (Int) -> Unit,
 ) : RecyclerView.Adapter<Adapter.KsiazkaLubFilmViewHolder>() {
     class KsiazkaLubFilmViewHolder(
@@ -46,7 +46,6 @@ class Adapter(
 
         holder.innerLayout.setOnClickListener {
             showAlertDialog(
-                currentKsiazkaLubFilm.rodzaj,
                 currentKsiazkaLubFilm.gatunek,
                 pszeczytane,
             )

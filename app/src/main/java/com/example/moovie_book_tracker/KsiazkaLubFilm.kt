@@ -5,6 +5,5 @@ class KsiazkaLubFilm(
     val recenzja: String,
     val gatunek: String,
     val ocena: Int,
-    val rodzaj: String,
     val pszeczytane: Boolean,
 )
