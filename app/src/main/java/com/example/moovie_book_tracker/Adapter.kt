@@ -3,61 +3,63 @@ package com.example.moovie_book_tracker
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class Adapter(
-    private val ksiazkaLubFilmList: MutableList<KsiazkaLubFilm>,
-    private val showAlertDialog: (String, String) -> Unit,
-    private val delete: (Int) -> Unit,
-) : RecyclerView.Adapter<Adapter.KsiazkaLubFilmViewHolder>() {
-    class KsiazkaLubFilmViewHolder(
+    private val itemList: MutableList<Item>,
+    private val showItemDetailsDialog: (String, String) -> Unit,
+    private val deleteItemFromList: (Int) -> Unit,
+) : RecyclerView.Adapter<Adapter.ItemViewHolder>() {
+    class ItemViewHolder(
         itemView: View,
     ) : RecyclerView.ViewHolder(itemView) {
-        val kisazkaLubFilmTytul: TextView = itemView.findViewById(R.id.layoutTytul)
-        val kisazkaLubFilmRecenzja: TextView = itemView.findViewById(R.id.layoutRecenzja)
-        val ksiaKisazkaLubFilmOcena: TextView = itemView.findViewById(R.id.layoutOcena)
-        val deleteButton: TextView = itemView.findViewById(R.id.deleteButton)
-        val innerLayout = itemView.findViewById<LinearLayout>(R.id.innerLayout)
+        val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
+        val reviewTextView: TextView = itemView.findViewById(R.id.reviewTextView)
+        val ratingTextView: TextView = itemView.findViewById(R.id.ratingTextView)
+        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+        val layout: LinearLayout = itemView.findViewById(R.id.layout)
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): KsiazkaLubFilmViewHolder {
+    ): ItemViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.ksiazka_lub_film, parent, false)
-
-        return KsiazkaLubFilmViewHolder(itemView)
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.ksiazka_lub_film, parent, false)
+        return ItemViewHolder(itemView)
     }
 
     override fun onBindViewHolder(
-        holder: KsiazkaLubFilmViewHolder,
+        holder: ItemViewHolder,
         position: Int,
     ) {
-        val currentKsiazkaLubFilm = ksiazkaLubFilmList[position]
+        val currentKsiazkaLubFilm = itemList[position]
 
-        holder.kisazkaLubFilmTytul.text = currentKsiazkaLubFilm.tytul
-        holder.kisazkaLubFilmRecenzja.text = currentKsiazkaLubFilm.recenzja
-        holder.ksiaKisazkaLubFilmOcena.text = "Ocena: ${currentKsiazkaLubFilm.ocena}"
+        holder.layout.visibility =
+            if (currentKsiazkaLubFilm.isVisible) View.VISIBLE else View.GONE
 
-        val pszeczytane = if (currentKsiazkaLubFilm.pszeczytane) "Tak" else "Nie"
+        holder.titleTextView.text = currentKsiazkaLubFilm.title
+        holder.reviewTextView.text = currentKsiazkaLubFilm.review
+        holder.ratingTextView.text = "Ocena: ${currentKsiazkaLubFilm.rating}"
 
-        holder.innerLayout.setOnClickListener {
-            showAlertDialog(
-                currentKsiazkaLubFilm.gatunek,
-                pszeczytane,
-            )
+        val pszeczytane = if (currentKsiazkaLubFilm.isRead) "Tak" else "Nie"
+
+        holder.layout.setOnLongClickListener {
+            showItemDetailsDialog(currentKsiazkaLubFilm.genre, pszeczytane)
+            true
         }
 
-        holder.deleteButton.setOnLongClickListener {
-            delete(position)
+        holder.deleteButton.setOnClickListener {
+            deleteItemFromList(position)
             notifyItemRemoved(position)
-            notifyItemRangeChanged(position, ksiazkaLubFilmList.size)
-            true
+            notifyItemRangeChanged(position, itemList.size)
         }
     }
 
-    override fun getItemCount(): Int = ksiazkaLubFilmList.size
+    override fun getItemCount(): Int = itemList.size
 }

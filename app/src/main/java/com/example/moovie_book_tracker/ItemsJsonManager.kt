@@ -5,22 +5,22 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import java.io.File
 
-object KsiazkasLubFilmsJsonManager {
+object ItemsJsonManager {
     private const val FILE_NAME = "sweets_data.json"
 
-    fun saveSweetsListToJson(
+    fun saveItemsToJson(
         context: Context,
-        sweetsList: List<KsiazkaLubFilm>,
+        itemsList: List<Item>,
     ) {
         File(context.filesDir, FILE_NAME).writeText(
-            GsonBuilder().setPrettyPrinting().create().toJson(sweetsList),
+            GsonBuilder().setPrettyPrinting().create().toJson(itemsList),
         )
     }
 
-    fun loadSweetsListFromJson(context: Context): List<KsiazkaLubFilm> {
+    fun loadItemsFromJson(context: Context): List<Item> {
         val file = File(context.filesDir, FILE_NAME)
         return if (file.exists()) {
-            Gson().fromJson(file.readText(), Array<KsiazkaLubFilm>::class.java).toList()
+            Gson().fromJson(file.readText(), Array<Item>::class.java).toList()
         } else {
             emptyList()
         }

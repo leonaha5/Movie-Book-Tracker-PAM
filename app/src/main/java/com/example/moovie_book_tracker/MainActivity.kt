@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.RadioGroup
+import android.widget.RadioButton
 import android.widget.SeekBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,86 +15,115 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    var ksiazkaLubFilmList = mutableListOf<KsiazkaLubFilm>()
+    private var itemsList = mutableListOf<Item>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+
+        setupWindowInsets()
+        loadItemsFromJson()
+        initializeRecyclerView()
+        initializeFilters()
+        initializeAddItemButton()
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
-        val tytulEditText = findViewById<EditText>(R.id.tytulEditText)
-        val recenzjaEditText = findViewById<EditText>(R.id.recenzjaEditText)
-        val gatunekEditText = findViewById<EditText>(R.id.gatunekEditText)
-        val ocenaSeekBar = findViewById<SeekBar>(R.id.ocenaSeekBar)
-        val rodzajRadioGroup = findViewById<RadioGroup>(R.id.rodzajRadioGroup)
-        val przeczytaneCheckBox = findViewById<CheckBox>(R.id.pszeczytaneCheckBox)
+    private fun loadItemsFromJson() {
+        itemsList =
+            ItemsJsonManager.loadItemsFromJson(this).toMutableList()
+    }
 
-        try {
-            ksiazkaLubFilmList =
-                KsiazkasLubFilmsJsonManager.loadSweetsListFromJson(this).toMutableList()
-        } catch (_: Exception) {
-        }
+    private fun initializeRecyclerView() {
+        val recyclerView = findViewById<RecyclerView>(R.id.itemsRecyclerView)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.KsiazkaLubFilmRecyclerView)
-
-        val showAlertDialog: (String, String) -> Unit = { gatunek, pszeczytane ->
+        val showItemDetailsDialog: (String, String) -> Unit = { genre, readStatus ->
             AlertDialog
                 .Builder(this)
-                .setTitle("Jakiś tytuł")
-                .setMessage("Gatunek: ${gatunek}\nPrzeczytane $pszeczytane")
-                .setNeutralButton("Zamknij") { dialog, _ ->
-                    dialog.dismiss()
-                }.create()
+                .setTitle("Details")
+                .setMessage("Genre: $genre\nRead: $readStatus")
+                .setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
+                .create()
                 .show()
         }
 
-        val delete: (Int) -> Unit = { position ->
-            ksiazkaLubFilmList.removeAt(position)
-            try {
-                KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
-            } catch (_: Exception) {
-            }
+        val deleteItemFromList: (Int) -> Unit = { position ->
+            itemsList.removeAt(position)
+            ItemsJsonManager.saveItemsToJson(this, itemsList)
         }
 
         val adapter =
             Adapter(
-                ksiazkaLubFilmList = ksiazkaLubFilmList,
-                showAlertDialog = showAlertDialog,
-                delete = delete,
+                itemList = itemsList,
+                showItemDetailsDialog = showItemDetailsDialog,
+                deleteItemFromList = deleteItemFromList,
             )
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+    }
 
-        findViewById<Button>(R.id.AddButton).setOnClickListener {
-            ksiazkaLubFilmList.add(
-                KsiazkaLubFilm(
-                    tytulEditText.text.toString().ifEmpty { "Brak tytulu" },
-                    recenzjaEditText.text.toString().ifEmpty { "Brak recenzji" },
-                    gatunekEditText.text.toString().ifEmpty { "Brak gatunku" },
-                    ocenaSeekBar.progress,
-                    przeczytaneCheckBox.isChecked,
-                ),
-            )
+    private fun initializeFilters() {
+        val radioButtonAll = findViewById<RadioButton>(R.id.radioButtonAll)
+        val radioButtonRead = findViewById<RadioButton>(R.id.radioButtonRead)
+        val radioButtonNotRead = findViewById<RadioButton>(R.id.radioButtonNotRead)
+        val adapter =
+            (findViewById<RecyclerView>(R.id.itemsRecyclerView).adapter as Adapter)
 
-            try {
-                KsiazkasLubFilmsJsonManager.saveSweetsListToJson(this, ksiazkaLubFilmList)
-            } catch (_: Exception) {
-            }
+        radioButtonAll.setOnClickListener {
+            itemsList.forEach { it.isVisible = true }
+            adapter.notifyDataSetChanged()
+        }
 
-            tytulEditText.text.clear()
-            recenzjaEditText.text.clear()
-            gatunekEditText.text.clear()
-            rodzajRadioGroup.clearCheck()
-            ocenaSeekBar.progress = 0
-            przeczytaneCheckBox.isChecked = false
+        radioButtonRead.setOnClickListener {
+            itemsList.forEach { it.isVisible = it.isRead }
+            adapter.notifyDataSetChanged()
+        }
 
-            adapter.notifyItemInserted(ksiazkaLubFilmList.size - 1)
+        radioButtonNotRead.setOnClickListener {
+            itemsList.forEach { it.isVisible = !it.isRead }
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun initializeAddItemButton() {
+        val titleEditText = findViewById<EditText>(R.id.titleEditText)
+        val reviewEditText = findViewById<EditText>(R.id.reviewEditText)
+        val genreEditText = findViewById<EditText>(R.id.genreEditText)
+        val ratingSeekBar = findViewById<SeekBar>(R.id.ratingSeekBar)
+        val readCheckBox = findViewById<CheckBox>(R.id.readCheckBox)
+        val adapter =
+            (findViewById<RecyclerView>(R.id.itemsRecyclerView).adapter as Adapter)
+
+        findViewById<Button>(R.id.addItemButton).setOnClickListener {
+            val newItem =
+                Item(
+                    title = titleEditText.text.toString().ifEmpty { "No Title" },
+                    review = reviewEditText.text.toString().ifEmpty { "No Review" },
+                    genre = genreEditText.text.toString().ifEmpty { "No Genre" },
+                    rating = ratingSeekBar.progress,
+                    isRead = readCheckBox.isChecked,
+                    isVisible = true,
+                )
+
+            itemsList.add(newItem)
+            ItemsJsonManager.saveItemsToJson(this, itemsList)
+
+            titleEditText.text.clear()
+            reviewEditText.text.clear()
+            genreEditText.text.clear()
+            ratingSeekBar.progress = 0
+            readCheckBox.isChecked = false
+
+            adapter.notifyItemInserted(itemsList.size - 1)
         }
     }
 }
